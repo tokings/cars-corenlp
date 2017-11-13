@@ -13,7 +13,7 @@
 	<version>0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>cars-corenlp-0.1</name>
+	<name>cars-corenlp-api</name>
 	<url>http://www.embracesource.com</url>
 
 	<properties>
