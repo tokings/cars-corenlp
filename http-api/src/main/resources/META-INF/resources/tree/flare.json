@@ -1,0 +1,46 @@
+{
+    "name": "2017-06-06 11:13:13,516,交易码：SMS9500003,msgCd：SMS99998,IP：null,regionId：CSMG_REGION,nodeId：CSMG,duration：4ms",
+    "children": [{
+        "name": "2017-06-06 11:13:13,516,交易码：SMS9500003,msgCd：SMS99998,IP：null,regionId：CSMG_REGION,nodeId：CSMG,duration：4ms",
+        "children": [{
+            "name": "cluster",
+            "children": [{
+                "name": "AgglomerativeCluster",
+                "size": 3938
+            }, {
+                "name": "CommunityStructure",
+                "size": 3812
+            }, {
+                "name": "HierarchicalCluster",
+                "size": 6714
+            }, {
+                "name": "MergeEdge",
+                "size": 743
+            }]
+        }, {
+            "name": "graph",
+            "children": [{
+                "name": "BetweennessCentrality",
+                "size": 3534
+            }, {
+                "name": "LinkDistance",
+                "size": 5731
+            }, {
+                "name": "MaxFlowMinCut",
+                "size": 7840
+            }, {
+                "name": "ShortestPaths",
+                "size": 5914
+            }, {
+                "name": "SpanningTree",
+                "size": 3416
+            }]
+        }, {
+            "name": "optimization",
+            "children": [{
+                "name": "AspectRatioBanker",
+                "size": 7074
+            }]
+        }]
+    }]
+}
