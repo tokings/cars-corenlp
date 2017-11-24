@@ -100,7 +100,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>cars-corenlp-0.1</finalName>
+		<finalName>cars-corenlp-api</finalName>
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
