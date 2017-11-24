@@ -257,9 +257,11 @@ public class AccidProfessionalDictNER {
 		final TreeMap<Integer, NameEntityType> tmpTreeMap = new TreeMap<>();
 		Set<String> subWords = Util.getAllSubStr(word, minFuzzyMatchCharLength);
 		subWords.forEach(subWord -> {
-			if(professionalDicts.containsKey(subWord)) {
-				tmpTreeMap.put(subWord.length(), professionalDicts.get(subWord));
-			}
+			professionalDicts.keySet().forEach(key -> {
+				if(key.contains(subWord)) {
+					tmpTreeMap.put(subWord.length(), professionalDicts.get(key));
+				}
+			});
 		});
 		// 如果最小模糊匹配有结果
 		if(! tmpTreeMap.isEmpty()) {
@@ -268,20 +270,19 @@ public class AccidProfessionalDictNER {
 		}
 
 		// 最小编辑距离匹配
-		tmpTreeMap.clear();
-		professionalDicts.entrySet().forEach(entry -> {
-			Integer key = Util.getMinEditDistance(word, entry.getKey());
-			if(key == null || key > minEditDistance) {
-//				System.out.println("最小编辑距离不符合要求或为空," + key + "," + word + "," + entry.getKey());
-				return;
-			}
-			tmpTreeMap.put(key, entry.getValue());
-		});
-		
-		// 如果符合最小编辑距离，则返回匹配的最小编辑距离对应词的命名实体
-		if(! tmpTreeMap.isEmpty() && minEditDistance <= tmpTreeMap.firstKey()) {
-			return tmpTreeMap.get(tmpTreeMap.firstKey()).name();
-		}
+//		tmpTreeMap.clear();
+//		professionalDicts.entrySet().forEach(entry -> {
+//			Integer key = Util.getMinEditDistance(word, entry.getKey());
+//			if(key == null || key > minEditDistance) {
+////				System.out.println("最小编辑距离不符合要求或为空," + key + "," + word + "," + entry.getKey());
+//				return;
+//			}
+//			tmpTreeMap.put(key, entry.getValue());
+//		});
+//		// 如果符合最小编辑距离，则返回匹配的最小编辑距离对应词的命名实体
+//		if(! tmpTreeMap.isEmpty() && minEditDistance <= tmpTreeMap.firstKey()) {
+//			return tmpTreeMap.get(tmpTreeMap.firstKey()).name();
+//		}
 		
 		// 没有匹配到命名实体，则默认返回O（其他实体）
 		return "O";
