@@ -13,12 +13,6 @@ import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * 命名实体标注前预处理
- * @author	tokings.tang@embracesource.com
- * @date	2017年11月29日 下午5:21:22
- * @copyright	http://www.embracesource.com
- */
 public class NerPreprocess {
 
 	static final String OUT_FILE_EXTENTION = ".ner";
@@ -132,11 +126,11 @@ public class NerPreprocess {
 						newLine = dict.get(arr[0]);
 					// 如果识别的词性标注为x，且词包含“站”、“线”，且词长度大于2，则标注为地点
 					} else if(
-							(arr[0].contains("站") || arr[0].contains("线"))
+							(arr[0].endsWith("站") || arr[0].endsWith("线"))
 							&& arr[0].length() > 2 && "x".equals(arr[1])) { 
-						newLine = line + "\tlocale";
+						newLine = arr[0] + "\tns\tlocale";
 					// 如果识别的词性标注为地点（ns），则标注为地点实体（locale）。可能会有一定的误差，主要看词典是否准确
-					} else if("ns".equals(arr[1])) { 
+					} else if("ns".equals(arr[1]) && arr[0].length() > 1) { 
 						newLine = line + "\tlocale";
 					} else {// 默认为O(other)
 						newLine = line + "\tO";
