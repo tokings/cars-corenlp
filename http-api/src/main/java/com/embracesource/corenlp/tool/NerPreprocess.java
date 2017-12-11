@@ -11,13 +11,16 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class NerPreprocess {
 
 	static final String OUT_FILE_EXTENTION = ".ner";
 	private static final String CHARSET = "UTF-8";
 	private static Map<String, String> dict = new HashMap<String, String>();
+	private static Set<String> stopDict = new HashSet<String>();
 	private static File outputPath = null;
 
 	public static void main(String[] args) {
@@ -39,6 +42,9 @@ public class NerPreprocess {
 		
 		readDict();
 		System.out.println("字典集大小：" + dict.size());
+		
+		readStopDict();
+		System.out.println("停词字典集大小：" + stopDict.size());
 
 		File inputPath = new File(args[0]);
 
@@ -101,6 +107,23 @@ public class NerPreprocess {
 		}
 	}
 
+	
+	private static void readStopDict() {
+		BufferedReader br = null;
+		try {
+			br = new BufferedReader(new InputStreamReader(
+					Thread.currentThread().getContextClassLoader().getResourceAsStream("stop.txt"), CHARSET));
+			String line = null;
+			while((line = br.readLine()) != null) {
+				stopDict.add(line);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			close(br);
+		}
+	}
+	
 	private static void process(File file) {
 		BufferedReader br = null;
 		File outFile = new File(outputPath, file.getName() + OUT_FILE_EXTENTION);
@@ -121,16 +144,21 @@ public class NerPreprocess {
 				String[] arr = line.split("\t");
 				
 				if(arr.length > 1) {
+					// 如果在停词库中出现了，直接标记为O
+					if(stopDict.contains(arr[0])) {
+						newLine = line + "\tO";
 					// 如果在词典中匹配到的话就替换
-					if(dict.containsKey(arr[0])) {
+					} else if(dict.containsKey(arr[0])) {
 						newLine = dict.get(arr[0]);
 					// 如果识别的词性标注为x，且词包含“站”、“线”，且词长度大于2，则标注为地点
 					} else if(
 							(arr[0].endsWith("站") || arr[0].endsWith("线"))
 							&& arr[0].length() > 2 && "x".equals(arr[1])) { 
 						newLine = arr[0] + "\tns\tlocale";
-					// 如果识别的词性标注为地点（ns），则标注为地点实体（locale）。可能会有一定的误差，主要看词典是否准确
-					} else if("ns".equals(arr[1]) && arr[0].length() > 1) { 
+					// 如果识别的词性标注为地点（ns）、长度大于1、并且不在停词文档中的，则标注为地点实体（locale）。
+					// 可能会有一定的误差，主要看词典和jieba词性标注是否准确
+					} else if("ns".equals(arr[1]) && arr[0].length() > 1
+							&& stopDict.contains(arr[0])) { 
 						newLine = line + "\tlocale";
 					} else {// 默认为O(other)
 						newLine = line + "\tO";
