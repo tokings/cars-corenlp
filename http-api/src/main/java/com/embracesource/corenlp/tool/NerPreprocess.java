@@ -142,8 +142,9 @@ public class NerPreprocess {
 
 			while ((line = br.readLine()) != null) {
 				String[] arr = line.split("\t");
-				
-				if(arr.length > 1) {
+				if("".equals(line.trim())) { // 保留空行
+					newLine = "";
+				} else if(arr.length > 1) {
 					// 如果在停词库中出现了，直接标记为O
 					if(stopDict.contains(arr[0])) {
 						newLine = line + "\tO";
