@@ -26,7 +26,7 @@ import edu.stanford.nlp.util.CoreMap;
  * @date	2017年11月28日 下午2:47:10
  * @copyright	http://www.embracesource.com
  */
-public class StationAbstractor {
+public class StationExtractor {
 	
 	static final StanfordCoreNLP CORE_NLP = new StanfordCoreNLP("StanfordCoreNLP-chinese.properties");
 	static final Pattern STATION_PTN = Pattern.compile("([^x00-xff]+站)");
